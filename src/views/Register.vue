@@ -30,7 +30,11 @@
         />
       </div>
 
-      <button type="submit" class="ui button fluid primary">
+      <button 
+        type="submit" 
+        class="ui button fluid primary"
+        :class="{ loading }"
+        >
         Register
       </button>
     </form>
@@ -42,9 +46,10 @@
 
 <script>
 import { ref } from "vue";
-import * as Yup from "yup"
-
-import BasicLayout from "../layouts/BasicLayout"
+import { useRouter } from "vue-router";
+import * as Yup from "yup";
+import BasicLayout from "../layouts/BasicLayout";
+import { registerApi } from "../api/user";
 
 export default {
     name: "Register",
@@ -52,8 +57,10 @@ export default {
         BasicLayout,
     },
     setup() {
-        let formData = ref({})
-        let formError = ref ({})
+        let formData = ref({});
+        let formError = ref ({});
+        let loading = ref(false);
+        const router = useRouter();
 
         const schemaForm = Yup.object().shape({
             username: Yup.string().required(true),
@@ -63,24 +70,36 @@ export default {
 
         const register = async () =>{
             formError.value = {};
+            loading.value = true
             // console.log("Registrando usuario")
             // console.log(formData.value)
 
             try {
               await schemaForm.validate(formData.value, {abortEarly: false})
 
-              console.log("TODO OK")
+              try {
+                const response = await registerApi(formData.value);
+                router.push("/login")
+
+                // console.log(response)
+              } catch (error) {
+                console.log(error)
+              }
+
+              // console.log("TODO OK")
             } catch (error) {
                 error.inner.forEach((err) => {
                     formError.value[err.path] = err.message
                 })
             }
-        }
+            loading.value=false;
+        };
 
         return{
             formData,
             register,
             formError,
+            loading,
         }
     }
 }

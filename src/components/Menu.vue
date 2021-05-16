@@ -4,12 +4,12 @@
         <div class="left menu">
             <router-link class="item" to="/">
                 <img class="ui small image" src="../assets/Logo.png" alt="Ecommerce">
-                <p>Categorias...</p>
+                <p>Categories...</p>
             </router-link>
         </div>
         <div class="right menu">
           <router-link class="item" to="/login">
-            Iniciar Sesion
+            Login
           </router-link>
         </div>
     </div>
