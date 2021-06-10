@@ -4,7 +4,18 @@
         <div class="left menu">
             <router-link class="item" to="/">
                 <img class="ui small image" src="../assets/Logo.png" alt="Ecommerce">
-                <p>Categories...</p>
+                <!-- <div class="ui dropdown">
+                  <div class="text">Categories</div>
+                  <i class="dropdown icon"></i>
+                  <div class="menu">
+                    <div class="item"> new </div>
+                  </div>
+                </div> -->
+                <template v-for="category in categories" :key="category.id">
+                  <router-link class="item" :to="category.slug">
+                    {{ category.title }}
+                  </router-link>
+                </template>
             </router-link>
         </div>
         <div class="right menu">
@@ -13,7 +24,7 @@
           </router-link>
           <template v-if="token">
             <router-link class="item" to="/orders"> Orders </router-link>
-              <span class="ui item cart">
+              <span class="ui item cart" @click="openCart">
                 <i class="shopping cart icon"></i>
               </span>
               <span class="ui item logout" @click="logout">
@@ -23,30 +34,49 @@
         </div>
     </div>
   </div>
+
 </template>
 
 <script>
+import { ref, onMounted } from "vue";
+import { useStore } from "vuex"
 import { getTokenApi, deleteTokenApi } from "../api/token"
+import { getCategoriesApi } from "../api/category"
 
 export default {
 name: "Menu",
 setup() {
+  let categories = ref(null);
   const token = getTokenApi();
+  const store = useStore();
+
+  onMounted(async () => {
+    const response = await getCategoriesApi();
+    categories.value = response;
+    // console.log(response);
+  }) 
 
   const logout = () => {
     deleteTokenApi();
     location.replace("/")
   }
 
+  const openCart = () => {
+    store.commit("setShowCart", true)
+  }
+
   return {
     token,
     logout,
+    categories,
+    openCart,
   };
 },
 };
 </script>
 
 <style lang="scss" scoped>
+
 .ui.menu.secondary{
     background-color: #16202b;
 

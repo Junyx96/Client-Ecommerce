@@ -34,6 +34,7 @@
         type="submit" 
         class="ui button fluid primary"
         :class="{ loading }"
+        
         >
         Register
       </button>

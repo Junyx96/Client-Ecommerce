@@ -20,7 +20,7 @@
           />
       </div>
       <button 
-        type="submot" 
+        type="submit" 
         class="ui button fluid primary"
         :class="{loading}"
         >
@@ -36,6 +36,7 @@
 import { ref, onMounted } from "vue"
 import { useRouter }from "vue-router"
 import * as Yup from "yup"
+
 import BasicLayout from "../layouts/BasicLayout"
 import { loginApi } from '../api/user'
 import { setTokenApi, getTokenApi } from "../api/token"
@@ -45,12 +46,15 @@ export default {
     components:{
         BasicLayout,
     },
+
     setup() {
       let formData = ref ({});
       let formError = ref ({});
       let loading = ref(false);
       const router = useRouter();
       const token = getTokenApi();
+      // const Swal = useSwal();
+
 
       onMounted(() =>{
         if (token) return router.push("/")
@@ -85,13 +89,14 @@ export default {
         });
       }
 
+
       };
 
       return {
         formData,
         formError,
         loading,
-        login
+        login,
       };
     }
 }

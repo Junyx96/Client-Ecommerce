@@ -1,12 +1,14 @@
 import { createStore } from 'vuex'
 
 export default createStore({
-  state: {
-  },
-  mutations: {
-  },
-  actions: {
-  },
-  modules: {
-  }
+    state: {
+        showCart: false,
+    },
+    mutations: {
+        setShowCart(state, payload) {
+            state.showCart = payload;
+        }
+    },
+    actions: {},
+    modules: {}
 })
